@@ -4,6 +4,8 @@ An editable computational-geometry workbench for point clouds. Draw or import co
 
 ![Point Envelope](docs/workbench.png)
 
+The plot occupies the main workspace, with measurements in a row below it. Open Coordinates to add or probe exact coordinates or edit the complete point list. Point buttons support keyboard selection and retain focus after redraw.
+
 ## Run
 
 Requires Python 3.10+. No runtime dependencies or API keys.

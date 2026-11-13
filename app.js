@@ -13,6 +13,7 @@ let points = fixture(),
 const fmt = (n) => Number(n.toFixed(3)).toLocaleString();
 function status(text) {
   $('status').textContent = text;
+  $('coordinate-status').textContent = text;
 }
 function controls() {
   for (const n of document.querySelectorAll('button,input,select,textarea')) n.disabled = busy;
@@ -68,6 +69,7 @@ function replace(candidate, remember = true) {
     result = null;
     $('coordinates').value = points.map((p) => `${p.x},${p.y}`).join('\n');
     $('probe-result').textContent = '';
+    $('coordinate-probe').textContent = '';
     compute();
   } catch (e) {
     status(e.message);
@@ -161,6 +163,7 @@ function render() {
       stroke: '#f8fcfa',
       'stroke-width': 1.5,
       tabindex: 0,
+      'data-point': i,
       role: 'button',
       'aria-label': `Select point ${i + 1}: ${p.x}, ${p.y}`,
     });
@@ -170,6 +173,7 @@ function render() {
       selected = i;
       render();
       controls();
+      root.querySelector(`[data-point="${i}"]`)?.focus();
     };
     circle.addEventListener('click', choose);
     circle.addEventListener('keydown', (e) => {
@@ -210,6 +214,7 @@ function probe(p) {
     probePoint = p;
     $('probe-result').textContent =
       `(${p.x}, ${p.y}) is ${locate(p, result.hull) === 'boundary' ? 'on the boundary of' : locate(p, result.hull)} the convex hull.`;
+    $('coordinate-probe').textContent = $('probe-result').textContent;
     render();
   } catch (e) {
     status(e.message);
@@ -304,4 +309,6 @@ $('file').addEventListener('change', async () => {
     $('file').value = '';
   }
 });
+$('coordinates-open').addEventListener('click', () => $('coordinate-dialog').showModal());
+$('coordinates-close').addEventListener('click', () => $('coordinate-dialog').close());
 replace(points, false);

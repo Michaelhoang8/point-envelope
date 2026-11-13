@@ -8,17 +8,13 @@
   </head>
   <body>
     <header>
-      <a href="#">point / envelope</a><span>COMPUTATIONAL GEOMETRY</span
-      ><label class="upload"
+      <h1>Point Envelope</h1>
+      <button id="coordinates-open">Coordinates</button>
+      <label class="upload"
         >Open point set<input id="file" type="file" accept=".json,.csv,.txt"
       /></label>
     </header>
     <main>
-      <section class="intro">
-        <p>THE SHAPE AROUND THE DATA</p>
-        <h1>Find the outer edge.</h1>
-        <div>Draw a cloud. Measure its reach.<br />See the tightest rectangle turn into place.</div>
-      </section>
       <section class="toolbar">
         <label
           >Example<select id="example">
@@ -45,23 +41,15 @@
           <svg
             id="canvas"
             viewBox="0 0 800 540"
-            role="img"
+            role="group"
             aria-label="Editable point cloud with geometric envelopes"
           ></svg>
           <p id="selection">
             Click the plot to add a point. Select an existing point to remove it.
           </p>
-          <div class="coordinate">
-            <label
-              >X<input id="x" type="number" min="-10000" max="10000" step="1" value="0" /></label
-            ><label
-              >Y<input id="y" type="number" min="-10000" max="10000" step="1" value="0" /></label
-            ><button id="add">Add coordinates</button><button id="probe">Probe coordinates</button>
-          </div>
           <p id="probe-result"></p>
         </section>
         <aside>
-          <h2>The measurements</h2>
           <div class="metric">
             <span>Hull area</span><strong id="area">—</strong><small>square coordinate units</small>
           </div>
@@ -81,20 +69,6 @@
           ><button id="hull-csv">Export hull CSV</button>
         </aside>
       </div>
-      <details>
-        <summary>Edit coordinates as text</summary>
-        <p>
-          One integer x,y pair per line. Duplicate points are retained in the input and collapsed
-          for geometry.
-        </p>
-        <textarea
-          id="coordinates"
-          rows="7"
-          aria-label="Coordinate list"
-          spellcheck="false"
-        ></textarea
-        ><button id="apply">Apply coordinates</button>
-      </details>
       <details>
         <summary>Predicates, precision & degenerate shapes</summary>
         <p>
@@ -119,8 +93,34 @@
           axes. All data and undo history stay in this browser; save before refreshing.
         </p>
       </details>
-      <footer>EXACT PREDICATES. MEASURED GEOMETRY. LOCAL DATA.</footer>
     </main>
+    <dialog id="coordinate-dialog" aria-labelledby="coordinate-title">
+      <div class="dialog-head">
+        <h2 id="coordinate-title">Coordinates</h2>
+        <button id="coordinates-close">Close</button>
+      </div>
+      <div class="coordinate">
+        <label>X<input id="x" type="number" min="-10000" max="10000" step="1" value="0" /></label
+        ><label>Y<input id="y" type="number" min="-10000" max="10000" step="1" value="0" /></label
+        ><button id="add">Add coordinates</button><button id="probe">Probe coordinates</button>
+      </div>
+      <details>
+        <summary>Edit coordinates as text</summary>
+        <p>
+          One integer x,y pair per line. Duplicate points are retained in the input and collapsed
+          for geometry.
+        </p>
+        <textarea
+          id="coordinates"
+          rows="7"
+          aria-label="Coordinate list"
+          spellcheck="false"
+        ></textarea
+        ><button id="apply">Apply coordinates</button>
+      </details>
+      <p id="coordinate-status" role="status"></p>
+      <p id="coordinate-probe"></p>
+    </dialog>
     <script type="module" src="app.js"></script>
   </body>
 </html>
