@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Point Envelope</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a href="#">point / envelope</a><span>COMPUTATIONAL GEOMETRY</span
+      ><label class="upload"
+        >Open point set<input id="file" type="file" accept=".json,.csv,.txt"
+      /></label>
+    </header>
+    <main>
+      <section class="intro">
+        <p>THE SHAPE AROUND THE DATA</p>
+        <h1>Find the outer edge.</h1>
+        <div>Draw a cloud. Measure its reach.<br />See the tightest rectangle turn into place.</div>
+      </section>
+      <section class="toolbar">
+        <label
+          >Example<select id="example">
+            <option value="cloud">Scattered cloud</option>
+            <option value="rotated">Rotated rectangle</option>
+            <option value="line">Collinear points</option>
+          </select></label
+        ><label
+          >Canvas action<select id="mode">
+            <option value="add">Add a point</option>
+            <option value="probe">Probe hull membership</option>
+          </select></label
+        ><button id="undo" disabled>Undo</button
+        ><button id="remove" disabled>Remove selected point</button
+        ><button id="save">Save point set</button>
+      </section>
+      <p id="status" role="status" aria-live="polite"></p>
+      <div class="workspace">
+        <section class="canvas-panel">
+          <div class="legend">
+            <span>● points</span><span>— hull</span><span>┄ enclosing rectangle</span
+            ><span>↔ diameter</span>
+          </div>
+          <svg
+            id="canvas"
+            viewBox="0 0 800 540"
+            role="img"
+            aria-label="Editable point cloud with geometric envelopes"
+          ></svg>
+          <p id="selection">
+            Click the plot to add a point. Select an existing point to remove it.
+          </p>
+          <div class="coordinate">
+            <label
+              >X<input id="x" type="number" min="-10000" max="10000" step="1" value="0" /></label
+            ><label
+              >Y<input id="y" type="number" min="-10000" max="10000" step="1" value="0" /></label
+            ><button id="add">Add coordinates</button><button id="probe">Probe coordinates</button>
+          </div>
+          <p id="probe-result"></p>
+        </section>
+        <aside>
+          <h2>The measurements</h2>
+          <div class="metric">
+            <span>Hull area</span><strong id="area">—</strong><small>square coordinate units</small>
+          </div>
+          <div class="metric">
+            <span>Enclosing rectangle area</span><strong id="box-area">—</strong
+            ><small id="box-shape"></small>
+          </div>
+          <div class="metric">
+            <span>Diameter</span><strong id="diameter">—</strong><small>farthest point pair</small>
+          </div>
+          <div class="metric">
+            <span>Hull perimeter</span><strong id="perimeter">—</strong
+            ><small>closed boundary length</small>
+          </div>
+          <p id="counts"></p>
+          <button id="report">Export geometry JSON</button
+          ><button id="hull-csv">Export hull CSV</button>
+        </aside>
+      </div>
+      <details>
+        <summary>Edit coordinates as text</summary>
+        <p>
+          One integer x,y pair per line. Duplicate points are retained in the input and collapsed
+          for geometry.
+        </p>
+        <textarea
+          id="coordinates"
+          rows="7"
+          aria-label="Coordinate list"
+          spellcheck="false"
+        ></textarea
+        ><button id="apply">Apply coordinates</button>
+      </details>
+      <details>
+        <summary>Predicates, precision & degenerate shapes</summary>
+        <p>
+          Coordinates are integers from −10,000 to 10,000, with at most 500 input points.
+          Orientation, hull area, and squared distances remain exact within JavaScript's safe
+          integer range. Rectangle projections and lengths use floating-point arithmetic.
+        </p>
+        <p>
+          The hull drops collinear interior edge points. The diameter uses rotating calipers on that
+          hull. The minimum-area enclosing rectangle checks each hull-edge orientation. Equal-area
+          orientations can have several valid answers; the first within a small numerical tolerance
+          is retained.
+        </p>
+        <p>
+          A single point has zero area, perimeter, and diameter. A line has zero area; its
+          closed-boundary perimeter is twice its endpoint distance. Point-location queries return
+          boundary for points on that segment, and outside otherwise. No interior is assigned to
+          degenerate hulls.
+        </p>
+        <p>
+          The canvas rounds additions and probes to integer coordinates. It uses equal scale on both
+          axes. All data and undo history stay in this browser; save before refreshing.
+        </p>
+      </details>
+      <footer>EXACT PREDICATES. MEASURED GEOMETRY. LOCAL DATA.</footer>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
